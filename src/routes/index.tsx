@@ -1,12 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AnimatePresence, motion, useInView } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowRight,
   Camera,
   ChevronLeft,
   ChevronRight,
   Clock,
-  Drone,
   Facebook,
   Film,
   Heart,
@@ -20,7 +19,7 @@ import {
   Users,
   Youtube,
 } from "lucide-react";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { Lightbox, type LightboxImage } from "@/components/site/Lightbox";
 import { Marquee } from "@/components/site/Marquee";
 

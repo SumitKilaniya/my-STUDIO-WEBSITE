@@ -4,6 +4,40 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --color-bg-dark: #0c0f0d;
+  --color-bg-darker: #08090a;
+  --color-surface: #141815;
+  --color-surface-2: #1b211d;
+  --color-border-soft: rgba(255,255,255,0.08);
+  --color-text-primary: #f5f6f4;
+  --color-text-secondary: #a3a8a3;
+  --color-accent: #22c55e;
+  --color-accent-light: #4ade80;
+  --color-accent-dark: #15803d;
+  --color-gold-tag: #c9a35c;
+  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+.marquee-track-left { animation: marquee-left 40s linear infinite; }
+.marquee-track-right { animation: marquee-right 40s linear infinite; }
+.marquee-pause:hover .marquee-track-left,
+.marquee-pause:hover .marquee-track-right { animation-play-state: paused; }
+
+html { scroll-behavior: smooth; }
+section { scroll-margin-top: 80px; }
+
+@custom-variant dark (&:is(.dark *));
+
 /*
  * Design system definition.
  *

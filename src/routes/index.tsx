@@ -1013,22 +1013,39 @@ function BookingBanner() {
 function ContactForm() {
   const [sent, setSent] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const sanitize = (s: string) => s.replace(/<[^>]*>/g, "").replace(/[\r\n]+/g, " ").trim();
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const data = new FormData(form);
     const errs: Record<string, string> = {};
-    if (!String(data.get("name") ?? "").trim()) errs.name = "Required";
-    const email = String(data.get("email") ?? "").trim();
+    const name = sanitize(String(data.get("name") ?? ""));
+    const email = sanitize(String(data.get("email") ?? ""));
+    const phone = sanitize(String(data.get("phone") ?? ""));
+    const event = sanitize(String(data.get("event") ?? ""));
+    const date = sanitize(String(data.get("date") ?? ""));
+    const message = sanitize(String(data.get("message") ?? ""));
+    if (!name) errs.name = "Required";
     if (!email) errs.email = "Required";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.email = "Invalid email";
-    if (!String(data.get("phone") ?? "").trim()) errs.phone = "Required";
-    if (!String(data.get("event") ?? "").trim()) errs.event = "Required";
+    if (!phone) errs.phone = "Required";
+    else if (!/^\d{10}$/.test(phone.replace(/\D/g, "").slice(-10))) errs.phone = "Enter a 10-digit phone";
+    if (!event) errs.event = "Required";
     setErrors(errs);
-    if (Object.keys(errs).length === 0) {
-      setSent(true);
-      e.currentTarget.reset();
-      setTimeout(() => setSent(false), 5000);
-    }
+    if (Object.keys(errs).length > 0) return;
+
+    const text =
+      `New Booking Inquiry — Anand Digital Studio%0A%0A` +
+      `Name: ${encodeURIComponent(name)}%0A` +
+      `Email: ${encodeURIComponent(email)}%0A` +
+      `Phone: ${encodeURIComponent(phone)}%0A` +
+      `Event Type: ${encodeURIComponent(event)}%0A` +
+      (date ? `Event Date: ${encodeURIComponent(date)}%0A` : "") +
+      (message ? `%0AMessage:%0A${encodeURIComponent(message)}` : "");
+    window.open(`https://wa.me/${STUDIO.whatsapp}?text=${text}`, "_blank", "noopener,noreferrer");
+    setSent(true);
+    form.reset();
+    setTimeout(() => setSent(false), 6000);
   };
 
   const inputCls =
@@ -1089,8 +1106,8 @@ function ContactForm() {
               Send Inquiry
             </button>
             {sent && (
-              <div className="rounded-xl border border-accent/40 bg-accent/10 px-4 py-3 text-sm text-accent">
-                Thank you — your inquiry was received. We'll be in touch within 24 hours.
+              <div className="rounded-xl border border-accent/40 bg-accent/10 px-4 py-3 text-sm text-accent" role="status">
+                Thank you! We'll get back to you within 24 hours.
               </div>
             )}
           </form>
@@ -1098,10 +1115,10 @@ function ContactForm() {
           <div className="space-y-5">
             <div className="grid grid-cols-2 gap-4">
               {[
-                { Icon: MapPin, l: "Studio Address", v: "12, Hauz Khas, Delhi" },
-                { Icon: Phone, l: "Phone", v: "+91 98765 43210" },
-                { Icon: Mail, l: "Email", v: "hello@ananddigital.studio" },
-                { Icon: Clock, l: "Business Hours", v: "Mon–Sat · 10–7" },
+                { Icon: MapPin, l: "Studio Address", v: STUDIO.address },
+                { Icon: Phone, l: "Phone", v: STUDIO.phone },
+                { Icon: Mail, l: "Email", v: STUDIO.email },
+                { Icon: Clock, l: "Business Hours", v: STUDIO.hours },
               ].map(({ Icon, l, v }) => (
                 <div key={l} className="rounded-2xl border border-border-soft bg-surface p-4">
                   <span className="grid h-9 w-9 place-items-center rounded-lg bg-accent/15 text-accent">
@@ -1115,22 +1132,22 @@ function ContactForm() {
             <div>
               <div className="text-xs font-semibold uppercase tracking-[0.18em] text-text-secondary">Follow:</div>
               <div className="mt-3 flex gap-2">
-                {[Instagram, Facebook, Youtube].map((Icon, i) => (
-                  <a key={i} href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="grid h-10 w-10 place-items-center rounded-full bg-surface text-accent transition hover:bg-accent hover:text-bg-darker">
-                    <Icon className="h-4 w-4" />
+                {SOCIAL_LINKS.map(({ Icon, href, label }) => (
+                  <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="grid h-10 w-10 place-items-center rounded-full bg-surface text-accent transition hover:bg-accent hover:text-bg-darker">
+                    <Icon className="h-4 w-4" aria-hidden="true" />
                   </a>
                 ))}
               </div>
             </div>
             <div className="relative overflow-hidden rounded-2xl border border-border-soft">
               <iframe
-                title="Studio location"
-                src="https://www.google.com/maps?q=Hauz+Khas+Delhi&output=embed"
+                title="Anand Digital Studio location on map"
+                src={STUDIO.mapsEmbed}
                 className="h-64 w-full grayscale-[0.4]"
                 loading="lazy"
               />
               <a
-                href="https://maps.google.com/?q=Hauz+Khas+Delhi"
+                href={STUDIO.mapsLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="absolute top-3 left-3 rounded-full bg-bg-darker/90 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur transition hover:bg-accent hover:text-bg-darker"

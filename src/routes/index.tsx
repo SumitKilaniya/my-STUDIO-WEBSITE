@@ -22,6 +22,7 @@ import {
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { Lightbox, type LightboxImage } from "@/components/site/Lightbox";
 import { Marquee } from "@/components/site/Marquee";
+import { fetchCloudinaryGallery } from "@/config/cloudinary";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -700,8 +701,22 @@ function Portfolio() {
   const [visible, setVisible] = useState(18);
   const [lightOpen, setLightOpen] = useState(false);
   const [lightStart, setLightStart] = useState(0);
+  const [pool, setPool] = useState(PORTFOLIO_POOL);
 
-  const filtered = PORTFOLIO_POOL.filter((p) => filter === "All" || p.cat === filter);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const remote = await fetchCloudinaryGallery();
+      if (!cancelled && remote && remote.length > 0) {
+        setPool(remote as typeof PORTFOLIO_POOL);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const filtered = pool.filter((p) => filter === "All" || p.cat === filter);
   const shown = filtered.slice(0, visible);
   const lightImages: LightboxImage[] = filtered.map((p) => ({
     src: p.src.replace("w=900", "w=1600"),

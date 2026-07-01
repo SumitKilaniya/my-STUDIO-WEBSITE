@@ -4,7 +4,7 @@
 // The site components can import from here to swap photos in one place.
 // ============================================================================
 
-const u = (id, w = 900) =>
+const u = (id: string, w = 900) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
 
 // REPLACE THIS URL WITH YOUR HERO PHOTO

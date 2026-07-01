@@ -253,6 +253,8 @@ function Navbar() {
 
   return (
     <header
+      role="navigation"
+      aria-label="Main navigation"
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
         scrolled
           ? "border-b border-border-soft bg-bg-dark/85 backdrop-blur-md"
@@ -260,11 +262,21 @@ function Navbar() {
       }`}
     >
       <div className="mx-auto flex h-[76px] max-w-[1280px] items-center justify-between px-6 md:px-16">
-        <a href="#home" className="flex items-center gap-2.5 font-display text-lg font-bold tracking-tight">
+        <a
+          href="#home"
+          aria-label="Anand Studio — home"
+          className="flex items-center gap-2.5 font-display text-lg font-bold tracking-tight"
+          style={{ height: 44 }}
+        >
           <span className="grid h-9 w-9 place-items-center rounded-full bg-accent/15 text-accent">
-            <Camera className="h-4 w-4" />
+            <Camera className="h-4 w-4" aria-hidden="true" />
           </span>
-          Anand Digital Studio
+          <span className="leading-tight">
+            <span className="block text-accent">Anand</span>
+            <span className="block text-[11px] font-medium tracking-[0.18em] text-text-secondary">
+              STUDIO
+            </span>
+          </span>
         </a>
         <nav className="hidden items-center gap-9 md:flex">
           {links.map((l) => (
@@ -352,9 +364,14 @@ function Hero() {
 
   return (
     <section id="home" className="relative min-h-screen overflow-hidden">
+      {/* REPLACE THIS URL WITH YOUR HERO PHOTO in src/data/images.js */}
       <img
         src={HERO_BG}
-        alt="Photographer in the desert at golden hour"
+        alt="Anand Studio — cinematic photography in Rohtak"
+        loading="eager"
+        fetchPriority="high"
+        width={2000}
+        height={1333}
         className="absolute inset-0 h-full w-full object-cover"
       />
       <div className="absolute inset-0 bg-gradient-to-r from-bg-darker/85 via-bg-darker/40 to-transparent" />

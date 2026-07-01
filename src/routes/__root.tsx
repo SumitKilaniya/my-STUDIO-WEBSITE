@@ -77,14 +77,39 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Anand Studio — Professional Photography in Rohtak" },
+      {
+        name: "description",
+        content:
+          "Anand Digital Studio captures weddings, pre-weddings, birthdays and events with cinematic precision in Rohtak. Book your session today.",
+      },
+      {
+        name: "keywords",
+        content:
+          "wedding photographer Rohtak, pre-wedding shoot Rohtak, event photography Rohtak, birthday photography, portrait photographer Rohtak, Anand Digital Studio",
+      },
+      { name: "author", content: "Anand Digital Studio" },
+      { name: "robots", content: "index, follow" },
+      { name: "theme-color", content: "#0c0f0d" },
+      { name: "X-Content-Type-Options", content: "nosniff" },
+      {
+        "http-equiv": "Content-Security-Policy",
+        content:
+          "default-src 'self' https: data: blob:; img-src 'self' https: data: blob:; style-src 'self' https: 'unsafe-inline'; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; font-src 'self' https: data:; connect-src 'self' https:; frame-src https://www.google.com https://maps.google.com https://res.cloudinary.com;",
+      },
+      { property: "og:title", content: "Anand Studio — Professional Photography in Rohtak" },
+      {
+        property: "og:description",
+        content:
+          "Cinematic wedding, pre-wedding, and event photography in Rohtak. Explore our curated portfolio and book your session.",
+      },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { property: "og:site_name", content: "Anand Studio" },
+      { property: "og:image", content: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1200&q=80" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Anand Studio — Professional Photography in Rohtak" },
+      { name: "twitter:description", content: "Weddings, pre-weddings, birthdays and events captured with cinematic precision." },
+      { name: "twitter:image", content: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1200&q=80" },
     ],
     links: [
       {
@@ -93,6 +118,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "preconnect", href: "https://images.unsplash.com", crossOrigin: "anonymous" },
+      { rel: "preconnect", href: "https://res.cloudinary.com", crossOrigin: "anonymous" },
+      {
+        rel: "preload",
+        as: "image",
+        href: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=2000&q=80",
+      },
+      { rel: "canonical", href: "/" },
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap",

@@ -23,7 +23,7 @@ export async function fetchCloudinaryGallery() {
     if (!res.ok) return null;
     const data = await res.json();
     if (!data?.resources?.length) return null;
-    return data.resources.map((r) => {
+    return data.resources.map((r: { public_id: string; format: string }) => {
       const filename = (r.public_id || "").split("/").pop() || "";
       const rawCat = filename.split("-")[0] || "Gallery";
       const cat = rawCat.charAt(0).toUpperCase() + rawCat.slice(1);
@@ -32,7 +32,7 @@ export async function fetchCloudinaryGallery() {
         .split("-")
         .slice(1)
         .join(" ")
-        .replace(/\b\w/g, (c) => c.toUpperCase()) || cat;
+        .replace(/\b\w/g, (c: string) => c.toUpperCase()) || cat;
       return {
         src: `https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto,w_900/${r.public_id}.${r.format}`,
         cat,

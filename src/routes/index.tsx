@@ -22,26 +22,80 @@ import {
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { Lightbox, type LightboxImage } from "@/components/site/Lightbox";
 import { Marquee } from "@/components/site/Marquee";
+import { fetchCloudinaryGallery } from "@/config/cloudinary";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Anand Digital Studio — Premium Photography" },
+      { title: "Anand Studio — Professional Photography in Rohtak" },
       {
         name: "description",
         content:
-          "Anand Digital Studio crafts cinematic wedding, portrait, and event photography that turns real moments into timeless visual memories.",
+          "Anand Digital Studio captures weddings, pre-weddings, birthdays and events with cinematic precision in Rohtak. Book your session today.",
       },
-      { property: "og:title", content: "Anand Digital Studio — Premium Photography" },
+      { property: "og:title", content: "Anand Studio — Professional Photography in Rohtak" },
       {
         property: "og:description",
         content:
-          "Cinematic wedding, portrait, and event photography. Explore a curated portfolio crafted with creativity and precision.",
+          "Cinematic wedding, pre-wedding, and event photography in Rohtak. Explore our curated portfolio and book your session.",
+      },
+      { property: "og:url", content: "/" },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          name: "Anand Digital Studio",
+          image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1200&q=80",
+          telephone: "+919355566209",
+          email: "anandstudio1980@gmail.com",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "near Dhanwantri School, Arya Nagar",
+            addressLocality: "Rohtak",
+            addressRegion: "Haryana",
+            postalCode: "124001",
+            addressCountry: "IN",
+          },
+          openingHours: ["Mo-Sa 10:00-19:00"],
+          sameAs: [
+            "https://www.instagram.com/ananddigitalstudio01/",
+            "https://www.facebook.com/people/Anand-Bhakti-Live/61576146626678/",
+          ],
+        }),
       },
     ],
   }),
   component: Index,
 });
+
+const STUDIO = {
+  name: "Anand Studio",
+  fullName: "Anand Digital Studio",
+  phone: "+91 93555 66209",
+  phoneHref: "tel:+919355566209",
+  whatsapp: "919355566209",
+  email: "anandstudio1980@gmail.com",
+  address: "near Dhanwantri School, Arya Nagar, Rohtak, Haryana 124001",
+  addressShort: "Arya Nagar, Rohtak",
+  hours: "Mon–Sat · 10 AM – 7 PM",
+  instagram: "https://www.instagram.com/ananddigitalstudio01/?hl=en",
+  facebook: "https://www.facebook.com/people/Anand-Bhakti-Live/61576146626678/?sk=about",
+  youtube:
+    "https://www.instagram.com/ananddigitalstudio01?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
+  mapsEmbed:
+    "https://www.google.com/maps?q=Anand+Digital+Studio+Arya+Nagar+Rohtak&output=embed",
+  mapsLink: "https://maps.google.com/?q=Anand+Digital+Studio+Arya+Nagar+Rohtak",
+};
+
+const SOCIAL_LINKS: { Icon: typeof Instagram; href: string; label: string }[] = [
+  { Icon: Instagram, href: STUDIO.instagram, label: "Instagram" },
+  { Icon: Facebook, href: STUDIO.facebook, label: "Facebook" },
+  { Icon: Youtube, href: STUDIO.youtube, label: "YouTube" },
+];
 
 const img = (id: string, w = 900) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
@@ -200,6 +254,8 @@ function Navbar() {
 
   return (
     <header
+      role="navigation"
+      aria-label="Main navigation"
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
         scrolled
           ? "border-b border-border-soft bg-bg-dark/85 backdrop-blur-md"
@@ -207,11 +263,21 @@ function Navbar() {
       }`}
     >
       <div className="mx-auto flex h-[76px] max-w-[1280px] items-center justify-between px-6 md:px-16">
-        <a href="#home" className="flex items-center gap-2.5 font-display text-lg font-bold tracking-tight">
+        <a
+          href="#home"
+          aria-label="Anand Studio — home"
+          className="flex items-center gap-2.5 font-display text-lg font-bold tracking-tight"
+          style={{ height: 44 }}
+        >
           <span className="grid h-9 w-9 place-items-center rounded-full bg-accent/15 text-accent">
-            <Camera className="h-4 w-4" />
+            <Camera className="h-4 w-4" aria-hidden="true" />
           </span>
-          Anand Digital Studio
+          <span className="leading-tight">
+            <span className="block text-accent">Anand</span>
+            <span className="block text-[11px] font-medium tracking-[0.18em] text-text-secondary">
+              STUDIO
+            </span>
+          </span>
         </a>
         <nav className="hidden items-center gap-9 md:flex">
           {links.map((l) => (
@@ -299,9 +365,14 @@ function Hero() {
 
   return (
     <section id="home" className="relative min-h-screen overflow-hidden">
+      {/* REPLACE THIS URL WITH YOUR HERO PHOTO in src/data/images.js */}
       <img
         src={HERO_BG}
-        alt="Photographer in the desert at golden hour"
+        alt="Anand Studio — cinematic photography in Rohtak"
+        loading="eager"
+        fetchPriority="high"
+        width={2000}
+        height={1333}
         className="absolute inset-0 h-full w-full object-cover"
       />
       <div className="absolute inset-0 bg-gradient-to-r from-bg-darker/85 via-bg-darker/40 to-transparent" />
@@ -584,19 +655,16 @@ function Team() {
               className="h-full w-full object-cover"
             />
             <div className="absolute top-4 left-4 flex gap-2 rounded-full bg-black/45 px-2 py-2 backdrop-blur">
-              {[
-                { Icon: Facebook, href: "https://facebook.com" },
-                { Icon: Instagram, href: "https://instagram.com" },
-                { Icon: Youtube, href: "https://youtube.com" },
-              ].map(({ Icon, href }, i) => (
+              {SOCIAL_LINKS.map(({ Icon, href, label }) => (
                 <a
-                  key={i}
+                  key={label}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={label}
                   className="grid h-9 w-9 place-items-center rounded-full bg-surface text-accent transition hover:bg-accent hover:text-bg-darker"
                 >
-                  <Icon className="h-4 w-4" />
+                  <Icon className="h-4 w-4" aria-hidden="true" />
                 </a>
               ))}
             </div>
@@ -633,8 +701,22 @@ function Portfolio() {
   const [visible, setVisible] = useState(18);
   const [lightOpen, setLightOpen] = useState(false);
   const [lightStart, setLightStart] = useState(0);
+  const [pool, setPool] = useState(PORTFOLIO_POOL);
 
-  const filtered = PORTFOLIO_POOL.filter((p) => filter === "All" || p.cat === filter);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const remote = await fetchCloudinaryGallery();
+      if (!cancelled && remote && remote.length > 0) {
+        setPool(remote as typeof PORTFOLIO_POOL);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const filtered = pool.filter((p) => filter === "All" || p.cat === filter);
   const shown = filtered.slice(0, visible);
   const lightImages: LightboxImage[] = filtered.map((p) => ({
     src: p.src.replace("w=900", "w=1600"),
@@ -943,22 +1025,39 @@ function BookingBanner() {
 function ContactForm() {
   const [sent, setSent] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const sanitize = (s: string) => s.replace(/<[^>]*>/g, "").replace(/[\r\n]+/g, " ").trim();
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const data = new FormData(form);
     const errs: Record<string, string> = {};
-    if (!String(data.get("name") ?? "").trim()) errs.name = "Required";
-    const email = String(data.get("email") ?? "").trim();
+    const name = sanitize(String(data.get("name") ?? ""));
+    const email = sanitize(String(data.get("email") ?? ""));
+    const phone = sanitize(String(data.get("phone") ?? ""));
+    const event = sanitize(String(data.get("event") ?? ""));
+    const date = sanitize(String(data.get("date") ?? ""));
+    const message = sanitize(String(data.get("message") ?? ""));
+    if (!name) errs.name = "Required";
     if (!email) errs.email = "Required";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.email = "Invalid email";
-    if (!String(data.get("phone") ?? "").trim()) errs.phone = "Required";
-    if (!String(data.get("event") ?? "").trim()) errs.event = "Required";
+    if (!phone) errs.phone = "Required";
+    else if (!/^\d{10}$/.test(phone.replace(/\D/g, "").slice(-10))) errs.phone = "Enter a 10-digit phone";
+    if (!event) errs.event = "Required";
     setErrors(errs);
-    if (Object.keys(errs).length === 0) {
-      setSent(true);
-      e.currentTarget.reset();
-      setTimeout(() => setSent(false), 5000);
-    }
+    if (Object.keys(errs).length > 0) return;
+
+    const text =
+      `New Booking Inquiry — Anand Digital Studio%0A%0A` +
+      `Name: ${encodeURIComponent(name)}%0A` +
+      `Email: ${encodeURIComponent(email)}%0A` +
+      `Phone: ${encodeURIComponent(phone)}%0A` +
+      `Event Type: ${encodeURIComponent(event)}%0A` +
+      (date ? `Event Date: ${encodeURIComponent(date)}%0A` : "") +
+      (message ? `%0AMessage:%0A${encodeURIComponent(message)}` : "");
+    window.open(`https://wa.me/${STUDIO.whatsapp}?text=${text}`, "_blank", "noopener,noreferrer");
+    setSent(true);
+    form.reset();
+    setTimeout(() => setSent(false), 6000);
   };
 
   const inputCls =
@@ -1019,8 +1118,8 @@ function ContactForm() {
               Send Inquiry
             </button>
             {sent && (
-              <div className="rounded-xl border border-accent/40 bg-accent/10 px-4 py-3 text-sm text-accent">
-                Thank you — your inquiry was received. We'll be in touch within 24 hours.
+              <div className="rounded-xl border border-accent/40 bg-accent/10 px-4 py-3 text-sm text-accent" role="status">
+                Thank you! We'll get back to you within 24 hours.
               </div>
             )}
           </form>
@@ -1028,10 +1127,10 @@ function ContactForm() {
           <div className="space-y-5">
             <div className="grid grid-cols-2 gap-4">
               {[
-                { Icon: MapPin, l: "Studio Address", v: "12, Hauz Khas, Delhi" },
-                { Icon: Phone, l: "Phone", v: "+91 98765 43210" },
-                { Icon: Mail, l: "Email", v: "hello@ananddigital.studio" },
-                { Icon: Clock, l: "Business Hours", v: "Mon–Sat · 10–7" },
+                { Icon: MapPin, l: "Studio Address", v: STUDIO.address },
+                { Icon: Phone, l: "Phone", v: STUDIO.phone },
+                { Icon: Mail, l: "Email", v: STUDIO.email },
+                { Icon: Clock, l: "Business Hours", v: STUDIO.hours },
               ].map(({ Icon, l, v }) => (
                 <div key={l} className="rounded-2xl border border-border-soft bg-surface p-4">
                   <span className="grid h-9 w-9 place-items-center rounded-lg bg-accent/15 text-accent">
@@ -1045,22 +1144,22 @@ function ContactForm() {
             <div>
               <div className="text-xs font-semibold uppercase tracking-[0.18em] text-text-secondary">Follow:</div>
               <div className="mt-3 flex gap-2">
-                {[Instagram, Facebook, Youtube].map((Icon, i) => (
-                  <a key={i} href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="grid h-10 w-10 place-items-center rounded-full bg-surface text-accent transition hover:bg-accent hover:text-bg-darker">
-                    <Icon className="h-4 w-4" />
+                {SOCIAL_LINKS.map(({ Icon, href, label }) => (
+                  <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="grid h-10 w-10 place-items-center rounded-full bg-surface text-accent transition hover:bg-accent hover:text-bg-darker">
+                    <Icon className="h-4 w-4" aria-hidden="true" />
                   </a>
                 ))}
               </div>
             </div>
             <div className="relative overflow-hidden rounded-2xl border border-border-soft">
               <iframe
-                title="Studio location"
-                src="https://www.google.com/maps?q=Hauz+Khas+Delhi&output=embed"
+                title="Anand Digital Studio location on map"
+                src={STUDIO.mapsEmbed}
                 className="h-64 w-full grayscale-[0.4]"
                 loading="lazy"
               />
               <a
-                href="https://maps.google.com/?q=Hauz+Khas+Delhi"
+                href={STUDIO.mapsLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="absolute top-3 left-3 rounded-full bg-bg-darker/90 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur transition hover:bg-accent hover:text-bg-darker"
@@ -1081,19 +1180,26 @@ function Footer() {
     <footer className="border-t border-border-soft bg-bg-darker pt-16">
       <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-10 px-6 pb-12 md:grid-cols-4 md:px-16">
         <div>
-          <a href="#home" className="flex items-center gap-2.5 font-display text-lg font-bold">
+          <a href="#home" className="flex items-center gap-2.5 font-display text-lg font-bold" aria-label="Anand Studio — home">
             <span className="grid h-9 w-9 place-items-center rounded-full bg-accent/15 text-accent">
-              <Camera className="h-4 w-4" />
+              <Camera className="h-4 w-4" aria-hidden="true" />
             </span>
-            Anand Digital Studio
+            <span className="leading-tight">
+              <span className="block text-accent">Anand</span>
+              <span className="block text-[11px] font-medium tracking-[0.18em] text-text-secondary">STUDIO</span>
+            </span>
           </a>
           <p className="mt-4 text-sm leading-relaxed text-text-secondary">
-            A boutique photography studio crafting cinematic, honest stories in light — for weddings, portraits, and beyond.
+            Anand Digital Studio — cinematic wedding, pre-wedding and event photography in Rohtak.
+          </p>
+          <p className="mt-3 text-xs text-text-secondary">
+            {STUDIO.address}<br />
+            <a href={STUDIO.phoneHref} className="hover:text-accent">{STUDIO.phone}</a> · <a href={`mailto:${STUDIO.email}`} className="hover:text-accent">{STUDIO.email}</a>
           </p>
           <div className="mt-4 flex gap-2">
-            {[Instagram, Facebook, Youtube].map((Icon, i) => (
-              <a key={i} href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="grid h-9 w-9 place-items-center rounded-full bg-surface text-accent transition hover:bg-accent hover:text-bg-darker">
-                <Icon className="h-4 w-4" />
+            {SOCIAL_LINKS.map(({ Icon, href, label }) => (
+              <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="grid h-9 w-9 place-items-center rounded-full bg-surface text-accent transition hover:bg-accent hover:text-bg-darker">
+                <Icon className="h-4 w-4" aria-hidden="true" />
               </a>
             ))}
           </div>

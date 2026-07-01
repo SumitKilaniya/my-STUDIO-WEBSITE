@@ -26,22 +26,75 @@ import { Marquee } from "@/components/site/Marquee";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Anand Digital Studio — Premium Photography" },
+      { title: "Anand Studio — Professional Photography in Rohtak" },
       {
         name: "description",
         content:
-          "Anand Digital Studio crafts cinematic wedding, portrait, and event photography that turns real moments into timeless visual memories.",
+          "Anand Digital Studio captures weddings, pre-weddings, birthdays and events with cinematic precision in Rohtak. Book your session today.",
       },
-      { property: "og:title", content: "Anand Digital Studio — Premium Photography" },
+      { property: "og:title", content: "Anand Studio — Professional Photography in Rohtak" },
       {
         property: "og:description",
         content:
-          "Cinematic wedding, portrait, and event photography. Explore a curated portfolio crafted with creativity and precision.",
+          "Cinematic wedding, pre-wedding, and event photography in Rohtak. Explore our curated portfolio and book your session.",
+      },
+      { property: "og:url", content: "/" },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          name: "Anand Digital Studio",
+          image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1200&q=80",
+          telephone: "+919355566209",
+          email: "anandstudio1980@gmail.com",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "near Dhanwantri School, Arya Nagar",
+            addressLocality: "Rohtak",
+            addressRegion: "Haryana",
+            postalCode: "124001",
+            addressCountry: "IN",
+          },
+          openingHours: ["Mo-Sa 10:00-19:00"],
+          sameAs: [
+            "https://www.instagram.com/ananddigitalstudio01/",
+            "https://www.facebook.com/people/Anand-Bhakti-Live/61576146626678/",
+          ],
+        }),
       },
     ],
   }),
   component: Index,
 });
+
+const STUDIO = {
+  name: "Anand Studio",
+  fullName: "Anand Digital Studio",
+  phone: "+91 93555 66209",
+  phoneHref: "tel:+919355566209",
+  whatsapp: "919355566209",
+  email: "anandstudio1980@gmail.com",
+  address: "near Dhanwantri School, Arya Nagar, Rohtak, Haryana 124001",
+  addressShort: "Arya Nagar, Rohtak",
+  hours: "Mon–Sat · 10 AM – 7 PM",
+  instagram: "https://www.instagram.com/ananddigitalstudio01/?hl=en",
+  facebook: "https://www.facebook.com/people/Anand-Bhakti-Live/61576146626678/?sk=about",
+  youtube:
+    "https://www.instagram.com/ananddigitalstudio01?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
+  mapsEmbed:
+    "https://www.google.com/maps?q=Anand+Digital+Studio+Arya+Nagar+Rohtak&output=embed",
+  mapsLink: "https://maps.google.com/?q=Anand+Digital+Studio+Arya+Nagar+Rohtak",
+};
+
+const SOCIAL_LINKS: { Icon: typeof Instagram; href: string; label: string }[] = [
+  { Icon: Instagram, href: STUDIO.instagram, label: "Instagram" },
+  { Icon: Facebook, href: STUDIO.facebook, label: "Facebook" },
+  { Icon: Youtube, href: STUDIO.youtube, label: "YouTube" },
+];
 
 const img = (id: string, w = 900) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;

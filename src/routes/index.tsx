@@ -654,19 +654,16 @@ function Team() {
               className="h-full w-full object-cover"
             />
             <div className="absolute top-4 left-4 flex gap-2 rounded-full bg-black/45 px-2 py-2 backdrop-blur">
-              {[
-                { Icon: Facebook, href: "https://facebook.com" },
-                { Icon: Instagram, href: "https://instagram.com" },
-                { Icon: Youtube, href: "https://youtube.com" },
-              ].map(({ Icon, href }, i) => (
+              {SOCIAL_LINKS.map(({ Icon, href, label }) => (
                 <a
-                  key={i}
+                  key={label}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={label}
                   className="grid h-9 w-9 place-items-center rounded-full bg-surface text-accent transition hover:bg-accent hover:text-bg-darker"
                 >
-                  <Icon className="h-4 w-4" />
+                  <Icon className="h-4 w-4" aria-hidden="true" />
                 </a>
               ))}
             </div>
@@ -1168,19 +1165,26 @@ function Footer() {
     <footer className="border-t border-border-soft bg-bg-darker pt-16">
       <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-10 px-6 pb-12 md:grid-cols-4 md:px-16">
         <div>
-          <a href="#home" className="flex items-center gap-2.5 font-display text-lg font-bold">
+          <a href="#home" className="flex items-center gap-2.5 font-display text-lg font-bold" aria-label="Anand Studio — home">
             <span className="grid h-9 w-9 place-items-center rounded-full bg-accent/15 text-accent">
-              <Camera className="h-4 w-4" />
+              <Camera className="h-4 w-4" aria-hidden="true" />
             </span>
-            Anand Digital Studio
+            <span className="leading-tight">
+              <span className="block text-accent">Anand</span>
+              <span className="block text-[11px] font-medium tracking-[0.18em] text-text-secondary">STUDIO</span>
+            </span>
           </a>
           <p className="mt-4 text-sm leading-relaxed text-text-secondary">
-            A boutique photography studio crafting cinematic, honest stories in light — for weddings, portraits, and beyond.
+            Anand Digital Studio — cinematic wedding, pre-wedding and event photography in Rohtak.
+          </p>
+          <p className="mt-3 text-xs text-text-secondary">
+            {STUDIO.address}<br />
+            <a href={STUDIO.phoneHref} className="hover:text-accent">{STUDIO.phone}</a> · <a href={`mailto:${STUDIO.email}`} className="hover:text-accent">{STUDIO.email}</a>
           </p>
           <div className="mt-4 flex gap-2">
-            {[Instagram, Facebook, Youtube].map((Icon, i) => (
-              <a key={i} href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="grid h-9 w-9 place-items-center rounded-full bg-surface text-accent transition hover:bg-accent hover:text-bg-darker">
-                <Icon className="h-4 w-4" />
+            {SOCIAL_LINKS.map(({ Icon, href, label }) => (
+              <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="grid h-9 w-9 place-items-center rounded-full bg-surface text-accent transition hover:bg-accent hover:text-bg-darker">
+                <Icon className="h-4 w-4" aria-hidden="true" />
               </a>
             ))}
           </div>
